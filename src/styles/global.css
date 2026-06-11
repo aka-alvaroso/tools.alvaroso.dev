@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --color-light:     #FEF9FF;
+  --color-dark:       #131313;
+  --color-blue:      #48ACF0;
+  --color-green:         #23CE6B;
+  --color-yellow: #FFDB4D;
+  --color-red:      #E63841;
+}
+
+@keyframes waveScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes arrowIn {
+  from { opacity: 0; transform: translateY(14px) scale(0.92); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+@keyframes wordFlip {
+  from { opacity: 0; transform: translateY(-7px) scale(0.88); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+@keyframes criteriaIn {
+  from { opacity: 0; transform: translateX(-5px); }
+  to   { opacity: 1; transform: translateX(0);    }
+}
+
+input[type="range"].range-dots {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 20px;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"].range-dots::-webkit-slider-runnable-track {
+  height: 3px;
+  background-image: radial-gradient(circle, #C4C4C4 1.5px, transparent 1.5px);
+  background-size: 12px 3px;
+  background-repeat: repeat-x;
+  background-position: 0 center;
+}
+input[type="range"].range-dots::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 3px;
+  height: 16px;
+  border-radius: 9999px;
+  background: #131313;
+  margin-top: -6.5px;
+  cursor: pointer;
+}
+input[type="range"].range-dots::-moz-range-track {
+  height: 3px;
+  background-image: radial-gradient(circle, #C4C4C4 1.5px, transparent 1.5px);
+  background-size: 12px 3px;
+  background-repeat: repeat-x;
+  background-position: 0 center;
+  border: none;
+}
+input[type="range"].range-dots::-moz-range-thumb {
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  width: 3px;
+  height: 16px;
+  border-radius: 9999px;
+  background: #131313;
+  cursor: pointer;
+}
+
+/* Hide number input spinners */
+input[type="number"].no-spin::-webkit-outer-spin-button,
+input[type="number"].no-spin::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"].no-spin {
+  -moz-appearance: textfield;
+}
+
+body {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  background-color: var(--color-light);
+  color: var(--color-dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+.scroll-subtle {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(19,19,19,0.15) transparent;
+}
+.scroll-subtle::-webkit-scrollbar        { width: 5px; }
+.scroll-subtle::-webkit-scrollbar-track  { background: transparent; }
+.scroll-subtle::-webkit-scrollbar-thumb  { background: rgba(19,19,19,0.15); border-radius: 9999px; }
+.scroll-subtle::-webkit-scrollbar-thumb:hover { background: rgba(19,19,19,0.28); }
