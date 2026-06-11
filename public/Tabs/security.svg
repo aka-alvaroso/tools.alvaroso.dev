@@ -1,0 +1,6 @@
+<svg width="45" height="50" viewBox="0 0 45 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- left half: bottom-center → top-left -->
+  <path d="M17.3357 46.3398 C10.7088 45.0971 -3.37312 24.5154 6.28078 6.8014" stroke="#E63841" stroke-width="6" stroke-linecap="round"/>
+  <!-- right half: bottom-center → right side → over top → top-left -->
+  <path d="M17.3357 46.3398 C23.9625 47.5825 45.0538 33.5963 41.454 13.397 C24.1224 10.147 26.99 3.29717 25.4607 3.01041 C23.9314 2.72365 24.1224 10.147 6.28078 6.8014" stroke="#E63841" stroke-width="6" stroke-linecap="round"/>
+</svg>
