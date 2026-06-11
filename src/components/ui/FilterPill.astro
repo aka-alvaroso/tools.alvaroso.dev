@@ -1,0 +1,41 @@
+---
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+export interface Props {
+  label: string;
+  value: string;
+  active?: boolean;
+  color?: string;
+}
+
+const { label, value, active = false, color = '#131313' } = Astro.props;
+
+// Read SVG at build time and make it responsive
+let svgContent = readFileSync(
+  join(process.cwd(), 'public', 'Tabs', `${value}.svg`),
+  'utf-8'
+);
+svgContent = svgContent
+  .replace(/width="[^"]*"/, 'width="100%"')
+  .replace(/height="[^"]*"/, 'height="100%"');
+---
+<button
+  data-filter={value}
+  data-pill-color={color}
+  class="filter-pill relative inline-flex items-center justify-center min-w-[88px] h-11 px-5 cursor-pointer select-none bg-transparent border-none outline-none text-dark"
+>
+  <!-- SVG inlined so GSAP can animate paths -->
+  <div
+    class="absolute inset-0 w-full h-full pointer-events-none"
+    data-illustration
+    style={`opacity: ${active ? '1' : '0.25'}`}
+    set:html={svgContent}
+  />
+  <span
+    class="relative z-10 text-[16px] text-dark"
+    style={active ? 'font-weight:900;font-style:italic' : 'font-weight:600;font-style:normal'}
+  >
+    {label}
+  </span>
+</button>

@@ -1,0 +1,58 @@
+---
+export type Category = 'security' | 'design' | 'develop' | 'data' | 'productivity';
+
+export interface Props {
+  title: string;
+  category: Category;
+  href: string;
+  available?: boolean;
+  illustrationKey?: string;
+  illustrationActive?: string; // override active image (e.g. password_tools_active1)
+}
+
+const { title, category, href, available = true, illustrationKey, illustrationActive } = Astro.props;
+
+const idleSrc   = illustrationKey ? `/Cards/${illustrationKey}_idle.svg`   : undefined;
+const activeSrc = illustrationActive ?? (illustrationKey ? `/Cards/${illustrationKey}_active.svg` : undefined);
+---
+<a
+  href={available ? href : undefined}
+  data-category={category}
+  class:list={[
+    'tool-card group flex flex-col rounded-[58px] bg-dark/5 p-[6px] transition-all duration-200 overflow-hidden lg:w-[280px] lg:h-[240px]',
+    available ? 'hover:bg-dark/[0.08] cursor-pointer' : 'opacity-50 cursor-not-allowed',
+  ]}
+>
+  <!-- Icon + Title -->
+  <div class="flex items-center gap-2 px-5 pt-5 pb-4">
+    <div class="text-dark flex-shrink-0">
+      <slot name="icon" />
+    </div>
+    <h3 class="font-semibold text-dark text-[20px] leading-tight">{title}</h3>
+  </div>
+
+  <!-- Illustration zone -->
+  <div class="relative flex-1 rounded-[52px] overflow-hidden bg-light min-h-[160px]">
+    {idleSrc && (
+      <img
+        src={idleSrc}
+        alt=""
+        class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 opacity-100 group-hover:opacity-0"
+      />
+    )}
+    <slot name="illustration">
+      {activeSrc && (
+        <img
+          src={activeSrc}
+          alt=""
+          class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+        />
+      )}
+    </slot>
+    {!available && (
+      <div class="absolute top-3 right-3 text-[10px] font-semibold uppercase tracking-wider bg-white/80 text-gray-400 px-2 py-0.5 rounded-full">
+        Soon
+      </div>
+    )}
+  </div>
+</a>
