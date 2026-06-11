@@ -1,0 +1,19 @@
+---
+import Layout from '../../components/layout/Layout.astro';
+import EmailAnalyzer from '../../components/tools/EmailAnalyzer';
+---
+
+<Layout
+  title="Email Analyzer"
+  description="Analyze raw email source for phishing indicators, authentication failures, and suspicious links — entirely in your browser."
+>
+  <div class="max-w-6xl mx-auto px-6">
+    <nav class="flex items-center gap-2 text-sm text-gray-400 mb-8" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-gray-700 transition-colors">Tools</a>
+      <span>/</span>
+      <span class="text-gray-700 font-medium">Email Analyzer</span>
+    </nav>
+  </div>
+
+  <EmailAnalyzer client:load />
+</Layout>
