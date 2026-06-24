@@ -1,0 +1,18 @@
+---
+type Variant = 'default' | 'soon';
+
+interface Props {
+  variant?: Variant;
+  label?: string;
+}
+
+const { variant = 'default', label } = Astro.props;
+
+const styles: Record<Variant, string> = {
+  default: 'bg-white/80 text-gray-400',
+  soon:    'bg-white/80 text-gray-400',
+};
+---
+<span class={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${styles[variant]}`}>
+  {label ?? <slot />}
+</span>

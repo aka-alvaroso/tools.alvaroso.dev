@@ -1,0 +1,20 @@
+---
+type Variant = 'primary' | 'ghost' | 'link';
+
+interface Props {
+  href: string;
+  variant?: Variant;
+  class?: string;
+}
+
+const { href, variant = 'primary', class: className = '' } = Astro.props;
+
+const styles: Record<Variant, string> = {
+  primary: 'inline-flex items-center gap-1.5 font-medium text-light bg-dark rounded-full py-2 px-4 hover:opacity-80 active:scale-95 transition-[opacity,transform] duration-150',
+  ghost:   'inline-flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm hover:bg-dark/5 active:scale-95 transition-[background-color,transform] duration-150',
+  link:    'text-sm font-semibold underline underline-offset-4 hover:text-dark/60 active:scale-95 transition-[color,transform] duration-150',
+};
+---
+<a href={href} class={`${styles[variant]} ${className}`}>
+  <slot />
+</a>
