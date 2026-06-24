@@ -1,18 +1,16 @@
 ---
+import ButtonLink from '../base/ButtonLink.astro';
 ---
 <header class="w-full">
   <nav class="flex items-center justify-between px-6 py-5 max-w-6xl mx-auto">
     <a href="/" class="flex items-center leading-none select-none">
       <img src="/logo.svg" alt="tools.alvaroso.dev" width="34" height="32" />
     </a>
-    <a
-      href="/about"
-      class="inline-flex items-center gap-1.5 text-base font-medium text-light bg-dark rounded-full py-2 px-4 transition-opacity duration-150 hover:opacity-80"
-    >
+    <ButtonLink href="/about" class="text-base">
       About
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
       </svg>
-    </a>
+    </ButtonLink>
   </nav>
 </header>

@@ -1,4 +1,6 @@
 ---
+import Badge from '../base/Badge.astro';
+
 export type Category = 'security' | 'design' | 'develop' | 'data' | 'productivity';
 
 export interface Props {
@@ -50,8 +52,8 @@ const activeSrc = illustrationActive ?? (illustrationKey ? `/Cards/${illustratio
       )}
     </slot>
     {!available && (
-      <div class="absolute top-3 right-3 text-[10px] font-semibold uppercase tracking-wider bg-white/80 text-gray-400 px-2 py-0.5 rounded-full">
-        Soon
+      <div class="absolute top-3 right-3">
+        <Badge variant="soon" label="Soon" />
       </div>
     )}
   </div>

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Nunito', ui-sans-serif, system-ui, sans-serif;
 
   --color-light:     #FEF9FF;
   --color-dark:       #131313;
@@ -91,7 +91,7 @@ input[type="number"].no-spin {
 }
 
 body {
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-family: 'Nunito', ui-sans-serif, system-ui, sans-serif;
   background-color: var(--color-light);
   color: var(--color-dark);
   -webkit-font-smoothing: antialiased;
