@@ -1,0 +1,8 @@
+---
+import Layout from '../../components/layout/Layout.astro';
+import ColorConverter from '../../components/tools/ColorConverter';
+---
+
+<Layout title="Color Converter" description="Convert colors between HEX, RGB, and HSL formats instantly.">
+  <ColorConverter client:only="react" />
+</Layout>
