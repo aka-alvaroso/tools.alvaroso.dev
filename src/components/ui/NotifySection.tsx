@@ -11,6 +11,19 @@ export default function NotifySection() {
 
   const overlayRef = useRef<HTMLDivElement>(null);
   const cardRef    = useRef<HTMLDivElement>(null);
+  const bellRef    = useRef<HTMLSpanElement>(null);
+
+  const handleBellHover = () => {
+    if (!bellRef.current) return;
+    gsap.killTweensOf(bellRef.current);
+    const tl = gsap.timeline({ onComplete: () => gsap.set(bellRef.current!, { rotation: 0 }) });
+    tl.to(bellRef.current, { rotation: 20,  transformOrigin: '50% 0%', duration: 0.10, ease: 'power1.out'   })
+      .to(bellRef.current, { rotation: -16, transformOrigin: '50% 0%', duration: 0.10, ease: 'power1.inOut' })
+      .to(bellRef.current, { rotation: 11,  transformOrigin: '50% 0%', duration: 0.09, ease: 'power1.inOut' })
+      .to(bellRef.current, { rotation: -7,  transformOrigin: '50% 0%', duration: 0.08, ease: 'power1.inOut' })
+      .to(bellRef.current, { rotation: 3,   transformOrigin: '50% 0%', duration: 0.07, ease: 'power1.inOut' })
+      .to(bellRef.current, { rotation: 0,   transformOrigin: '50% 0%', duration: 0.07, ease: 'power1.out'   });
+  };
 
   useLayoutEffect(() => {
     if (!visible || !overlayRef.current || !cardRef.current) return;
@@ -54,9 +67,12 @@ export default function NotifySection() {
           variant="secondary"
           className="bg-blue/15 text-blue hover:bg-blue/25"
           onClick={() => setVisible(true)}
+          onMouseEnter={handleBellHover}
         >
           Notify me
-          <Bell size={18} strokeWidth={2.5} />
+          <span ref={bellRef} className="inline-flex">
+            <Bell size={18} strokeWidth={2.5} />
+          </span>
         </Button>
       </div>
 
