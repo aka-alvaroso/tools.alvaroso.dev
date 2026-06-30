@@ -1,0 +1,20 @@
+<svg width="268" height="180" viewBox="0 0 268 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!--
+  Grid: col x=22,80,138,196 · row y=7,65,123 · cell=50 · gap=8 · 2-span=108
+  Colors: app palette only — #E63841 #FFDB4D #23CE6B #48ACF0
+  z-order back→front for correct overlap during GSAP transitions
+-->
+<!-- static -->
+<rect id="ccv-lime"   x="22"  y="123" width="50" height="50"  rx="25" fill="#FFDB4D"/>
+<rect id="ccv-bluest" x="80"  y="123" width="50" height="50"  rx="25" fill="#48ACF0"/>
+<rect id="ccv-pink"   x="138" y="123" width="50" height="50"  rx="25" fill="#E63841"/>
+<rect id="ccv-orange" x="22"  y="65"  width="50" height="50"  rx="25" fill="#48ACF0"/>
+<!-- animated -->
+<rect id="ccv-red"    x="22"  y="7"   width="50" height="50"  rx="25" fill="#E63841"/>
+<rect id="ccv-green"  x="80"  y="7"   width="50" height="50"  rx="25" fill="#FFDB4D"/>
+<rect id="ccv-sky"    x="196" y="123" width="50" height="50"  rx="25" fill="#23CE6B"/>
+<rect id="ccv-teal"   x="80"  y="65"  width="50" height="50"  rx="25" fill="#E63841"/>
+<rect id="ccv-coral"  x="196" y="65"  width="50" height="50"  rx="25" fill="#FFDB4D"/>
+<rect id="ccv-purple" x="138" y="7"   width="50" height="108" rx="25" fill="#23CE6B"/>
+<rect id="ccv-hot"    x="196" y="7"   width="50" height="50"  rx="25" fill="#48ACF0"/>
+</svg>
