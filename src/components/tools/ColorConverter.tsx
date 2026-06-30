@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
 import ButtonLink from '../base/ButtonLink';
 
 type Format = 'hex' | 'rgb' | 'hsl';
@@ -13,6 +14,15 @@ function hueToRgb(p: number, q: number, t: number): number {
 }
 
 export default function ColorConverter() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (!containerRef.current) return;
+    gsap.from(Array.from(containerRef.current.children), {
+      opacity: 0, y: 24, duration: 0.5, ease: 'power3.out', stagger: 0.08, clearProps: 'all',
+    });
+  }, []);
+
   const [activeFormat, setActiveFormat] = useState<Format>('hex');
   const [hex, setHex]   = useState('48ACF0');
   const [r, setR]       = useState('72');
@@ -143,7 +153,7 @@ export default function ColorConverter() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col justify-center items-center">
+    <div ref={containerRef} className="max-w-6xl mx-auto px-6 py-12 flex flex-col justify-center items-center">
 
       <div className="w-full">
         <ButtonLink href="/" variant="ghost" className="group font-bold text-dark/50 hover:text-dark">
