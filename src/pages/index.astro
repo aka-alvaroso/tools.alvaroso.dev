@@ -45,6 +45,18 @@ emailActiveSvg = emailActiveSvg
   // Close the magnifier group before the clip-path group closes
   .replace(/stroke-linejoin="round"\/>\s*<\/g>\s*\n<defs>/, 'stroke-linejoin="round"/>\n</g>\n</g>\n<defs>');
 
+// ── Color Converter: inline both idle and active SVGs ────────────────────────
+const ccvInlineStyle = 'style="width:100%;height:100%;display:block;"';
+let ccvIdleSvg = readFileSync(
+  join(process.cwd(), 'public', 'Cards', 'color_converter_idle.svg'), 'utf-8'
+);
+ccvIdleSvg = ccvIdleSvg.replace('width="268" height="180"', ccvInlineStyle);
+
+let ccvAnimSvg = readFileSync(
+  join(process.cwd(), 'public', 'Cards', 'color_converter_active.svg'), 'utf-8'
+);
+ccvAnimSvg = ccvAnimSvg.replace('width="268" height="180"', ccvInlineStyle);
+
 // ── Color Contrast: annotate active SVG for GSAP ─────────────────────────────
 let ccActiveSvg = readFileSync(
   join(process.cwd(), 'public', 'Cards', 'color_contrast_active.svg'), 'utf-8'
@@ -125,6 +137,7 @@ const tools: {
 }[] = [
   { title: 'Password Tools',  category: 'security', href: '/tools/password-tools',  available: true, illustrationKey: 'password_tools',
     illustrationActive: '/Cards/password_tools_active1.svg',                                                                                   icon: icon.key      },
+  { title: 'Color Converter', category: 'design',   href: '/tools/color-converter', available: true, illustrationKey: '',                       icon: icon.palette  },
 ];
 ---
 
@@ -182,6 +195,12 @@ const tools: {
               class="absolute inset-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
               set:html={ccActiveSvg}
             />
+          )}
+          {tool.title === 'Color Converter' && (
+            <div slot="illustration" class="absolute inset-0">
+              <div class="absolute inset-0 transition-opacity duration-300 opacity-100 group-hover:opacity-0" set:html={ccvIdleSvg} />
+              <div class="absolute inset-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100" set:html={ccvAnimSvg} />
+            </div>
           )}
         </ToolCard>
       ))}
@@ -445,6 +464,65 @@ const tools: {
     }
   }
 
+  // ── Color Converter card: grid-morph loop ────────────────────────────────────
+  const ccvCard   = document.querySelector<HTMLElement>('a[href="/tools/color-converter"]');
+  const ccvPurple = document.querySelector<SVGRectElement>('#ccv-purple');
+
+  if (ccvCard && ccvPurple) {
+    const eIn  = 'power3.in';
+    const eOut = 'power2.out';
+    const eSpr = 'elastic.out(1, 0.45)';
+    const DUR  = 0.36;
+    const HOLD = 1.0;
+
+    const ccvTL = gsap.timeline({ repeat: -1, paused: true });
+
+    // A→B: Purple coils+snaps → Teal springs wide (sequential: no overlap)
+    ccvTL
+      .to('#ccv-purple', { attr: { height: 50  }, duration: DUR * 0.6, ease: eIn })
+      .to('#ccv-teal',   { attr: { width: 108  }, duration: DUR * 1.6, ease: eSpr }, '>+0')
+      .to({}, { duration: HOLD })
+
+    // B→C: Coral escapes left first → HotPink springs down (Teal snaps back)
+      .to('#ccv-teal',  { attr: { width: 50   }, duration: DUR * 0.6,  ease: eIn })
+      .to('#ccv-coral', { attr: { x: 138      }, duration: DUR * 0.75, ease: 'power3.out' }, '+=0.04')
+      .to('#ccv-hot',   { attr: { height: 108 }, duration: DUR * 1.6,  ease: eSpr }, '<0.12')
+      .to({}, { duration: HOLD })
+
+    // C→D: HotPink coils+snaps → Sky springs tall (sequential: no overlap)
+      .to('#ccv-hot', { attr: { height: 50         }, duration: DUR * 0.6, ease: eIn })
+      .to('#ccv-sky', { attr: { y: 65, height: 108 }, duration: DUR * 1.6, ease: eSpr }, '>+0')
+      .to({}, { duration: HOLD })
+
+    // D→E: cascade escapes first → Red springs wide
+      .to('#ccv-sky',   { attr: { y: 123, height: 50 }, duration: DUR * 0.6,  ease: eIn })
+      .to('#ccv-green', { attr: { y: 65             }, duration: DUR * 0.6,  ease: 'power3.out' }, '+=0.04')
+      .to('#ccv-teal',  { attr: { x: 138            }, duration: DUR * 0.85, ease: eOut }, '<0')
+      .to('#ccv-coral', { attr: { x: 196            }, duration: DUR * 0.85, ease: eOut }, '<0.06')
+      .to('#ccv-red',   { attr: { width: 108        }, duration: DUR * 1.6,  ease: eSpr }, '<0.06')
+      .to({}, { duration: HOLD })
+
+    // E→A: Red snaps fast → Teal escapes left → Green returns → Purple springs tall
+      .to('#ccv-red',    { attr: { width: 50   }, duration: DUR * 0.5,  ease: 'power3.out' })
+      .to('#ccv-teal',   { attr: { x: 80       }, duration: DUR * 0.7,  ease: 'power3.out' }, '+=0.04')
+      .to('#ccv-green',  { attr: { y: 7        }, duration: DUR * 0.85, ease: eOut }, '<0.04')
+      .to('#ccv-purple', { attr: { height: 108 }, duration: DUR * 1.6,  ease: eSpr }, '<0.2')
+      .to({}, { duration: HOLD });
+
+    function ccvReset() {
+      gsap.set('#ccv-purple', { attr: { height: 108 } });
+      gsap.set('#ccv-teal',   { attr: { x: 80, width: 50 } });
+      gsap.set('#ccv-hot',    { attr: { height: 50 } });
+      gsap.set('#ccv-coral',  { attr: { x: 196 } });
+      gsap.set('#ccv-sky',    { attr: { y: 123, height: 50 } });
+      gsap.set('#ccv-red',    { attr: { width: 50 } });
+      gsap.set('#ccv-green',  { attr: { y: 7 } });
+    }
+
+    ccvCard.addEventListener('mouseenter', () => { ccvReset(); ccvTL.restart(); });
+    ccvCard.addEventListener('mouseleave', () => { ccvTL.pause(); ccvReset(); });
+  }
+
   // ── Email Analyzer card: draw-in + scan loop ──────────────────────────────────
 
   const emTexts = ['em-red','em-t1','em-t2','em-t3','em-green','em-t4','em-t5']
@@ -505,4 +583,5 @@ const tools: {
       });
     }
   }
+
 </script>
