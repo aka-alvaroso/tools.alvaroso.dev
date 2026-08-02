@@ -1,6 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import { useRef } from 'react';
 import gsap from 'gsap';
+import { cn } from '../../lib/cn';
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'icon';
 
@@ -50,7 +51,7 @@ export default function Button({ variant = 'primary', className = '', children, 
   return (
     <button
       ref={ref}
-      className={`${styles[variant]} ${className}`}
+      className={cn(styles[variant], className)}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}

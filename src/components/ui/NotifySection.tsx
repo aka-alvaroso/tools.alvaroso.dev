@@ -1,5 +1,7 @@
 import { useState, useRef, useLayoutEffect } from 'react';
-import { Bell, X, Check } from 'lucide-react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { BellIcon, Cancel01Icon, CheckIcon } from '@hugeicons/core-free-icons';
+import Modal from '../base/Modal';
 import gsap from 'gsap';
 import Button from '../base/Button';
 import Input from '../base/Input';
@@ -56,30 +58,18 @@ export default function NotifySection() {
           onClick={() => setVisible(true)}
         >
           Notify me
-          <Bell size={18} strokeWidth={2.5} />
+          <HugeiconsIcon icon={BellIcon} size={18} strokeWidth={2.5} />
         </Button>
       </div>
 
-      {visible && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div
-            ref={overlayRef}
-            className="absolute inset-0 bg-dark/30 backdrop-blur-sm cursor-pointer"
-            onClick={closeModal}
-          />
-          <div ref={cardRef} className="relative bg-light rounded-[32px] p-8 w-full max-w-sm shadow-2xl">
-            <Button
-              variant="icon"
-              className="absolute top-5 right-5 text-gray-400"
-              onClick={closeModal}
-            >
-              <X size={18} />
-            </Button>
-
-            {submitted ? (
+      <Modal 
+        isOpen={visible}
+        onClose={() => setVisible(false)}
+      >
+        {submitted ? (
               <div className="flex flex-col items-center text-center py-4 gap-3">
                 <div className="w-12 h-12 rounded-full bg-green/15 flex items-center justify-center">
-                  <Check size={22} className="text-green" strokeWidth={2.5} />
+                  <HugeiconsIcon icon={CheckIcon} size={22} className="text-green" strokeWidth={2.5} />
                 </div>
                 <p className="font-black text-xl text-dark">You're in!</p>
                 <p className="text-sm text-gray-400">We'll let you know when new tools arrive.</p>
@@ -104,9 +94,7 @@ export default function NotifySection() {
                 </form>
               </>
             )}
-          </div>
-        </div>
-      )}
+      </Modal>
     </>
   );
 }
