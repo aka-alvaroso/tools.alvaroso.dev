@@ -1,6 +1,7 @@
 import type { AnchorHTMLAttributes, ReactNode } from 'react';
 import { useRef } from 'react';
 import gsap from 'gsap';
+import { cn } from '../../lib/cn';
 
 type Variant = 'primary' | 'ghost' | 'link';
 
@@ -43,7 +44,7 @@ export default function ButtonLink({ href, variant = 'primary', className = '', 
     <a
       ref={ref}
       href={href}
-      className={`${styles[variant]} ${className}`}
+      className={cn(styles[variant], className)}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
