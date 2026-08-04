@@ -1,6 +1,6 @@
-import { useState, useRef, useLayoutEffect } from 'react';
+import { useState, useRef } from 'react';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { BellIcon, Cancel01Icon, CheckIcon } from '@hugeicons/core-free-icons';
+import { BellIcon, CheckIcon } from '@hugeicons/core-free-icons';
 import Modal from '../base/Modal';
 import gsap from 'gsap';
 import Button from '../base/Button';
@@ -11,30 +11,21 @@ export default function NotifySection() {
   const [email, setEmail]         = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const cardRef    = useRef<HTMLDivElement>(null);
+  const bellRef    = useRef<HTMLSpanElement>(null);
 
-  useLayoutEffect(() => {
-    if (!visible || !overlayRef.current || !cardRef.current) return;
-
-    gsap.killTweensOf([overlayRef.current, cardRef.current]);
-    gsap.set(overlayRef.current, { opacity: 0 });
-    gsap.set(cardRef.current,    { opacity: 0, scale: 0.86, y: 28 });
-
-    const tl = gsap.timeline();
-    tl.to(overlayRef.current, { opacity: 1, duration: 0.35, ease: 'power2.out' }, 0);
-    tl.to(cardRef.current, { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: 'back.out(1.8)' }, 0.04);
-  }, [visible]);
-
-  const closeModal = () => {
-    if (!overlayRef.current || !cardRef.current) { setVisible(false); return; }
-
-    gsap.killTweensOf([overlayRef.current, cardRef.current]);
-
-    const tl = gsap.timeline({ onComplete: () => setVisible(false) });
-    tl.to(cardRef.current,    { opacity: 0, scale: 0.9, y: 16, duration: 0.22, ease: 'power3.in' }, 0);
-    tl.to(overlayRef.current, { opacity: 0, duration: 0.28, ease: 'power2.in' }, 0);
+  const handleBellHover = () => {
+    if (!bellRef.current) return;
+    gsap.killTweensOf(bellRef.current);
+    const tl = gsap.timeline({ onComplete: () => gsap.set(bellRef.current!, { rotation: 0 }) });
+    tl.to(bellRef.current, { rotation: 20,  transformOrigin: '50% 0%', duration: 0.10, ease: 'power1.out'   })
+      .to(bellRef.current, { rotation: -16, transformOrigin: '50% 0%', duration: 0.10, ease: 'power1.inOut' })
+      .to(bellRef.current, { rotation: 11,  transformOrigin: '50% 0%', duration: 0.09, ease: 'power1.inOut' })
+      .to(bellRef.current, { rotation: -7,  transformOrigin: '50% 0%', duration: 0.08, ease: 'power1.inOut' })
+      .to(bellRef.current, { rotation: 3,   transformOrigin: '50% 0%', duration: 0.07, ease: 'power1.inOut' })
+      .to(bellRef.current, { rotation: 0,   transformOrigin: '50% 0%', duration: 0.07, ease: 'power1.out'   });
   };
+
+  const closeModal = () => setVisible(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,9 +47,12 @@ export default function NotifySection() {
           variant="secondary"
           className="bg-blue/15 text-blue hover:bg-blue/25"
           onClick={() => setVisible(true)}
+          onMouseEnter={handleBellHover}
         >
           Notify me
-          <HugeiconsIcon icon={BellIcon} size={18} strokeWidth={2.5} />
+          <span ref={bellRef} className="inline-flex">
+            <HugeiconsIcon icon={BellIcon} size={18} strokeWidth={2.5} />
+          </span>
         </Button>
       </div>
 

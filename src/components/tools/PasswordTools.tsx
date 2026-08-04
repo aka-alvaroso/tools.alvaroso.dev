@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import gsap from 'gsap';
 import { ZxcvbnFactory } from '@zxcvbn-ts/core';
 import * as zxcvbnCommonPackage from '@zxcvbn-ts/language-common';
@@ -67,10 +67,18 @@ export default function PasswordTools() {
   const [animKey, setAnimKey]             = useState(0);
 
   const strength       = getStrength(score);
+  const containerRef   = useRef<HTMLDivElement>(null);
   const inputRef       = useRef<HTMLInputElement>(null);
   const charEls        = useRef<(HTMLSpanElement | null)[]>([]);
   const lengthCharEls  = useRef<(HTMLSpanElement | null)[]>([]);
   const lengthFirst    = useRef(true);
+
+  useLayoutEffect(() => {
+    if (!containerRef.current) return;
+    gsap.from(Array.from(containerRef.current.children), {
+      opacity: 0, y: 24, duration: 0.5, ease: 'power3.out', stagger: 0.08, clearProps: 'all',
+    });
+  }, []);
 
   useEffect(() => {
     if (lengthFirst.current) { lengthFirst.current = false; return; }
@@ -134,7 +142,7 @@ export default function PasswordTools() {
   const showDisplay = !isTyping && displayChars.length > 0;
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col justify-center items-center">
+    <div ref={containerRef} className="max-w-6xl mx-auto px-6 py-12 flex flex-col justify-center items-center">
 
       <div className="w-full">
         <ButtonLink href="/" variant="ghost" className="group font-bold text-dark/50 hover:text-dark">
