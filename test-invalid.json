@@ -1,0 +1,10 @@
+{
+  "name": "Alvaro",
+  "age": 28,
+  "isDeveloper": true,
+  "skills": ["JavaScript", "TypeScript", "React",]
+  "address": {
+    "city": "Madrid",
+    "country": "Spain"
+  },
+}
