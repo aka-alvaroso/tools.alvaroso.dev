@@ -1,0 +1,13 @@
+{
+  "name": "Alvaro",
+  "skills": ["JavaScript", "TypeScript", "React"],
+  "address": {
+    "city": "Madrid",
+    "country": "Spain",
+    "coordinates": [40.4168, -3.7038]
+  },
+  "projects": [
+    { "name": "tools.alvaroso.dev", "tags": ["astro", "react"] },
+    { "name": "json-formatter", "tags": [] }
+  ]
+}

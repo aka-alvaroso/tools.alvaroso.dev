@@ -1,0 +1,15 @@
+{
+  "zero": 0,
+  "negativeZero": -0,
+  "integer": 42,
+  "negative": -42,
+  "decimal": 3.14,
+  "negativeDecimal": -2.5,
+  "exponent": 1e10,
+  "exponentPlus": 1e+10,
+  "exponentMinus": 1e-10,
+  "exponentUpper": 1E5,
+  "decimalWithExponent": 2.5e-3,
+  "exponentLeadingZero": 1e08,
+  "bigInt": 123456789012345
+}

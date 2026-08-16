@@ -78,6 +78,24 @@ pomodoroActiveSvg = pomodoroActiveSvg
   .replace('<path d="M135.778 114.621L122.889 101.732"', '<path id="pomo-hand-short" d="M135.778 114.621L122.889 101.732"')
   .replace('<path d="M117.5 86L117.5 53"', '<path id="pomo-hand-long" d="M117.5 86L117.5 53"');
 
+// ── JSON Formatter: annotate active SVG so GSAP can type-in / validate-green ──
+let jfActiveSvg = readFileSync(
+  join(process.cwd(), 'public', 'Cards', 'json_formatter_active.svg'), 'utf-8'
+);
+jfActiveSvg = jfActiveSvg
+  .replace('width="234" height="179"', 'style="width:100%;height:100%;display:block;"')
+  .replace('<path d="M3.17045 56.0323', '<path id="jf-brace-1" d="M3.17045 56.0323')
+  .replace('<path d="M230.524 127.208', '<path id="jf-brace-2" d="M230.524 127.208')
+  .replace('<path d="M45.2117 47.0008L161.874 47.0007"', '<path id="jf-line-1" d="M45.2117 47.0008L161.874 47.0007"')
+  .replace('<path d="M179.712 47L210.712 47"', '<path id="jf-line-2" d="M179.712 47L210.712 47"')
+  .replace('<path d="M56.7117 76.5956H183.93"', '<path id="jf-line-3" d="M56.7117 76.5956H183.93"')
+  .replace('<path d="M128.712 110H180.112"', '<path id="jf-line-4" d="M128.712 110H180.112"')
+  .replace('<path d="M51.7117 110.282H104.041"', '<path id="jf-line-5" d="M51.7117 110.282H104.041"')
+  .replace('<path d="M99.7117 138H183.286"', '<path id="jf-line-6" d="M99.7117 138H183.286"')
+  .replace('<path d="M53.2117 138.118H78.544"', '<path id="jf-line-7" d="M53.2117 138.118H78.544"')
+  // Checkmark - doesn't exist in the source SVG, injected before the closing tag
+  .replace('</svg>', '<g id="jf-check" transform="translate(180 145)"><path d="M2 7.6L6.2 11.8L16 1" stroke="#23CE6B" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></g></svg>');
+
 // ── Password Tools: composite SVG from the three active states ────────────────
 function pwExtractPaths(svg: string) {
   const paths: string[] = [];
@@ -147,7 +165,8 @@ const tools: {
   { title: 'Password Tools',  category: 'security', href: '/tools/password-tools',  available: true, illustrationKey: 'password_tools',
     illustrationActive: '/Cards/password_tools_active1.svg',                                                                                   icon: icon.key      },
   { title: 'Color Converter', category: 'design',   href: '/tools/color-converter', available: true, illustrationKey: '',                       icon: icon.palette  },
-  { title: 'Pomodoro timer', category: 'productivity', href: '/tools/pomodoro', available: true, illustrationKey: '', icon: icon.timer}
+  { title: 'Pomodoro timer', category: 'productivity', href: '/tools/pomodoro', available: true, illustrationKey: '', icon: icon.timer},
+  { title: 'JSON Formatter', category: 'data', href: '/tools/json-formatter', available: true, illustrationKey: '', icon: icon.braces},
 ];
 ---
 
@@ -184,6 +203,9 @@ const tools: {
               class="absolute inset-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
               set:html={hashActiveSvg}
             />
+          )}
+          {tool.title === 'JSON Formatter' && (
+            <div id="jf-illustration" slot="illustration" class="absolute inset-0" set:html={jfActiveSvg} />
           )}
           {tool.title === 'Password Tools' && (
             <div
@@ -619,6 +641,69 @@ const tools: {
     pomoCard.addEventListener('mouseleave', () => {
       pomoTL.pause();
       gsap.set([pomoHandShort, pomoHandLong], { rotation: 0 });
+    });
+  }
+
+  // ── JSON Formatter card: type-in lines → validate green → checkmark → reset ─
+
+  const jfLineEls  = [1, 2, 3, 4, 5, 6, 7].map(n =>
+    document.querySelector<SVGPathElement>(`#jf-line-${n}`)
+  );
+  const jfBraceEls = [1, 2].map(n => document.querySelector<SVGPathElement>(`#jf-brace-${n}`));
+  const jfCheck    = document.querySelector<SVGGElement>('#jf-check');
+  const jfCard     = document.querySelector<HTMLElement>('a[href="/tools/json-formatter"]');
+
+  if (jfLineEls.every(el => el) && jfBraceEls.every(el => el) && jfCheck && jfCard) {
+    const jfColors      = ['#23CE6B', '#E63841', '#FFDB4D', '#23CE6B', '#E63841', '#FFDB4D', '#23CE6B'];
+    const jfIdleStroke  = '#131313';
+    const jfIdleOpacity = 0.08;
+    const jfBlue        = '#48ACF0';
+
+    gsap.set([...jfLineEls, ...jfBraceEls], { transformBox: 'fill-box', transformOrigin: 'center', rotation: 0 });
+    gsap.set(jfLineEls, { stroke: jfIdleStroke, strokeOpacity: jfIdleOpacity });
+    gsap.set(jfBraceEls, { fill: jfIdleStroke, fillOpacity: 0.05 });
+    gsap.set(jfCheck, { transformBox: 'fill-box', transformOrigin: 'center', scale: 0, opacity: 0 });
+
+    const jfTL = gsap.timeline({ repeat: -1, paused: true });
+
+    // 0) Braces color in with a little rotation kick, then settle straight
+    jfTL
+      .to(jfBraceEls, { fill: jfBlue, fillOpacity: 1, rotation: -6, duration: 0.16, ease: 'power2.out' }, 0)
+      .to(jfBraceEls, { rotation: 0, duration: 0.32, ease: 'back.out(2.2)' }, '-=0.02');
+
+    // 1) Lines color in one by one, kicking into a slight tilt then springing straight -
+    //    like syntax-highlighted text being typed
+    jfLineEls.forEach((el, i) => {
+      const pos = i === 0 ? '-=0.2' : '-=0.16';
+      const tilt = i % 2 === 0 ? -9 : 9;
+      jfTL
+        .to(el, { stroke: jfColors[i], strokeOpacity: 1, rotation: tilt, duration: 0.14, ease: 'power2.out' }, pos)
+        .to(el, { rotation: 0, duration: 0.26, ease: 'back.out(2.5)' }, '-=0.02');
+    });
+    jfTL.to({}, { duration: 0.3 });
+
+    // 2) Everything flashes to a uniform green - the JSON validated correctly
+    jfTL.to([...jfLineEls, ...jfBraceEls], { stroke: '#23CE6B', fill: '#23CE6B', strokeOpacity: 1, fillOpacity: 1, stagger: 0.03, duration: 0.28, ease: 'power2.out' });
+
+    // 3) Checkmark pops in, holds a moment
+    jfTL.to(jfCheck, { scale: 1, opacity: 1, duration: 0.35, ease: 'back.out(2.5)' }, '-=0.05');
+    jfTL.to({}, { duration: 0.9 });
+
+    // 4) Checkmark leaves, then everything fades back to idle, lines from last to first
+    jfTL.to(jfCheck, { scale: 0, opacity: 0, duration: 0.22, ease: 'back.in(2)' });
+    [...jfLineEls].reverse().forEach((el, i) => {
+      jfTL.to(el, { stroke: jfIdleStroke, strokeOpacity: jfIdleOpacity, duration: 0.18, ease: 'power2.in' }, i === 0 ? '-=0.05' : '-=0.08');
+    });
+    jfTL.to(jfBraceEls, { fill: jfIdleStroke, fillOpacity: 0.05, duration: 0.18, ease: 'power2.in' }, '-=0.08');
+    jfTL.to({}, { duration: 0.35 });
+
+    jfCard.addEventListener('mouseenter', () => jfTL.restart());
+    jfCard.addEventListener('mouseleave', () => {
+      jfTL.pause();
+      gsap.set([...jfLineEls, ...jfBraceEls], { rotation: 0 });
+      gsap.set(jfLineEls, { stroke: jfIdleStroke, strokeOpacity: jfIdleOpacity });
+      gsap.set(jfBraceEls, { fill: jfIdleStroke, fillOpacity: 0.05 });
+      gsap.set(jfCheck, { scale: 0, opacity: 0 });
     });
   }
 
