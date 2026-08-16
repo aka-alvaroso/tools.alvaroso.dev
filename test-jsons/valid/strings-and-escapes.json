@@ -1,0 +1,9 @@
+{
+  "plain": "hello world",
+  "withQuote": "she said \"hi\"",
+  "withBackslash": "C:\\Users\\akaal",
+  "withNewline": "line1\nline2",
+  "withTab": "col1\tcol2",
+  "withUnicode": "caf\u00e9",
+  "empty": ""
+}

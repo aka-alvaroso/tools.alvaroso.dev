@@ -1,0 +1,8 @@
+{
+  "isActive": true,
+  "isDeleted": false,
+  "middleName": null,
+  "emptyObject": {},
+  "emptyArray": [],
+  "nestedEmpty": { "list": [], "meta": {} }
+}
