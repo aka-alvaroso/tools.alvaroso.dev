@@ -1,4 +1,4 @@
-import { useState, useEffect, use, useRef } from "react";
+import { useState, useEffect, use, useRef, useLayoutEffect } from "react";
 import gsap from 'gsap';
 import Button from '../base/Button';
 import ButtonLink from '../base/ButtonLink';
@@ -32,6 +32,15 @@ export default function Pomodoro() {
     const timerCharEls = useRef<(HTMLSpanElement | null)[]>([]);
     const prevTimerChars = useRef<string[]>([]);
     const timerDurationsFirst = useRef(true);
+    const containerRef   = useRef<HTMLDivElement>(null);
+
+    useLayoutEffect(() => {
+        if (!containerRef.current) return;
+        gsap.from(Array.from(containerRef.current.children), {
+          opacity: 0, y: 24, duration: 0.5, ease: 'power3.out', stagger: 0.08, clearProps: 'all',
+        });
+      }, []);
+    
 
     useEffect(() => {
             localStorage.setItem('pomodoro', JSON.stringify({
@@ -151,7 +160,7 @@ export default function Pomodoro() {
 
 
     return (
-        <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col justify-center items-center">
+        <div ref={containerRef} className="max-w-6xl mx-auto px-6 py-12 flex flex-col justify-center items-center">
             <div className="w-full">
                 <ButtonLink href="/" variant="ghost" className="group font-bold text-dark/50 hover:text-dark">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -161,7 +170,6 @@ export default function Pomodoro() {
                 All tools
             </ButtonLink>
             </div>
-            <div className="mb-10 w-full max-w-2xl">
                 <h1 className="text-4xl font-bold text-center mb-6">Pomodoro</h1>
                 <p className="text-center text-dark/60 mb-10">Time your work and breaks with
                     <ButtonLink
@@ -254,7 +262,6 @@ export default function Pomodoro() {
                         {`Cycles done: ${timesCount}/${maxTimesCount}`}
                     </p>
                 </div>
-            </div>
 
             <PomodoroModal
                 isOpen={isSettingsModalOpen}

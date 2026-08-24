@@ -709,4 +709,15 @@ const tools: {
     });
   }
 
+  // ── Entrada de las cards al cargar la página ──────────────────────────────────
+  // Se retrasa un frame con requestAnimationFrame para que arranque después de que
+  // el navegador haya podido asentarse (hidratación de islas React, etc.), y no
+  // colisione con ese trabajo justo cuando empieza el tween.
+
+  requestAnimationFrame(() => {
+    gsap.from(Array.from(cards), {
+      opacity: 0, y: 24, duration: 0.5, ease: 'power3.out', stagger: 0.08, clearProps: 'all',
+    });
+  });
+
 </script>

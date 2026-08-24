@@ -1,6 +1,8 @@
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, useLayoutEffect } from "react"
 import ButtonLink from "../base/ButtonLink";
 import Button from "../base/Button";
+import gsap from 'gsap';
+
 
 
 export default function JSONFormatter() {
@@ -17,11 +19,20 @@ export default function JSONFormatter() {
             unexpectedToken: ''
         },
     });
+    const containerRef = useRef<HTMLInputElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const measureRef = useRef<HTMLSpanElement>(null);
     const [charMetrics, setCharMetrics] = useState({ width: 8.4, height: 20 });
     const [scrollPos, setScrollPos] = useState({ top: 0, left: 0 });
+
+
+    useLayoutEffect(() => {
+        if (!containerRef.current) return;
+        gsap.from(Array.from(containerRef.current.children), {
+          opacity: 0, y: 24, duration: 0.5, ease: 'power3.out', stagger: 0.08, clearProps: 'all',
+        });
+      }, []);
 
     // Measures the exact pixel size of one monospace character, so the error
     // highlight can be positioned without duplicating/rendering the text itself.
@@ -568,7 +579,7 @@ export default function JSONFormatter() {
     }
 
     return (
-        <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col justify-center items-center">
+        <div ref={containerRef} className="max-w-6xl mx-auto px-6 py-12 flex flex-col justify-center items-center">
             <div className="w-full">
                 <ButtonLink href="/" variant="ghost" className="group font-bold text-dark/50 hover:text-dark">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
