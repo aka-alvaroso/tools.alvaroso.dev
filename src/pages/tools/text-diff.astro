@@ -1,0 +1,9 @@
+
+---
+import Layout from '../../components/layout/Layout.astro';
+import TextDiff from '../../components/tools/TextDiff';
+---
+
+<Layout title="Text Diff" description="Compare two texts and see what changed between them">
+  <TextDiff client:only="react" />
+</Layout>
